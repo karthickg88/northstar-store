@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northstar — Everyday Goods</title>
+<style>
+:root { color-scheme: light dark; --bg: light-dark(#f7f7f4,#111310); --surface: light-dark(#ffffff,#1b1e19); --ink: light-dark(#20251e,#f1f3ec); --muted: light-dark(#6c7268,#a4ab9d); --line: light-dark(#e4e7df,#343930); --accent: light-dark(#244e37,#a6d7b2); --accent-ink: light-dark(#fff,#132619); --soft: light-dark(#edf2e9,#252e25); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.app { min-height: 100vh; background: var(--bg); }
+.topline { padding: 9px 20px; text-align: center; background: var(--accent); color: var(--accent-ink); font-size: 12px; letter-spacing: .04em; }
+header { max-width: 1240px; padding: 22px 28px; margin: auto; display: flex; align-items: center; gap: 28px; border-bottom: 1px solid var(--line); }
+.logo { font-size: 24px; letter-spacing: -.06em; font-weight: 850; white-space: nowrap; }
+.logo span { color: var(--accent); }
+.search { flex: 1; display: flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px 5px 4px 16px; gap: 8px; }
+.search input { min-width: 0; width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 14px; }
+.search button, .primary { border: 0; border-radius: 999px; background: var(--accent); color: var(--accent-ink); padding: 10px 17px; font-weight: 700; }
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.icon-btn { border: 1px solid var(--line); color: var(--ink); background: var(--surface); border-radius: 999px; padding: 10px 13px; }
+.cart-count { display: inline-grid; place-items: center; min-width: 19px; height: 19px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 11px; margin-left: 4px; }
+nav { max-width: 1240px; margin: auto; padding: 0 28px; display: flex; gap: 25px; overflow-x: auto; border-bottom: 1px solid var(--line); }
+nav button { border: 0; background: transparent; color: var(--muted); padding: 15px 0; white-space: nowrap; border-bottom: 2px solid transparent; }
+nav button.active, nav button:hover { color: var(--ink); border-bottom-color: var(--accent); }
+main { max-width: 1240px; padding: 26px 28px 60px; margin: auto; }
+.hero { background: #e6eddf; color: #203526; border-radius: 24px; min-height: 300px; display: grid; grid-template-columns: 1.1fr .9fr; overflow: hidden; }
+.hero-copy { padding: clamp(28px,5vw,60px); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(35px,5vw,62px); line-height: .98; letter-spacing: -.065em; max-width: 520px; margin: 16px 0; }
+.hero p { color: #526657; line-height: 1.6; max-width: 390px; margin: 0 0 22px; }
+.hero .primary { background: #244e37; color: #fff; }
+.hero-art { display: grid; place-items: center; position: relative; min-height: 260px; background: radial-gradient(circle at 50% 42%,#f9f4e7 0 23%,transparent 24%), linear-gradient(140deg,#d7e4ce,#b7cbb0); }
+.art-orb { width: min(68%,280px); aspect-ratio: 1; border-radius: 50%; background: #f6eee0; display: grid; place-items: center; font-size: clamp(85px,14vw,160px); box-shadow: 18px 22px 0 #9bb496; transform: rotate(-8deg); }
+.trust-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 20px 0 38px; }
+.trust { display: flex; gap: 12px; align-items: center; padding: 15px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.trust-icon { font-size: 22px; }
+.trust strong { display: block; font-size: 13px; }
+.trust small { color: var(--muted); font-size: 11px; }
+.section-head { display: flex; justify-content: space-between; align-items: end; gap: 15px; margin: 0 0 18px; }
+.section-head h2 { margin: 0; font-size: 28px; letter-spacing: -.05em; }
+.section-head p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+.controls { display: flex; gap: 8px; align-items: center; }
+select { background: var(--surface); border: 1px solid var(--line); color: var(--ink); border-radius: 10px; padding: 10px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 20px; }
+.chip { border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 8px 14px; white-space: nowrap; font-size: 12px; }
+.chip.active { background: var(--soft); color: var(--ink); border-color: var(--accent); }
+.products { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 18px; }
+.product { min-width: 0; }
+.product-visual { aspect-ratio: 1/1.05; border-radius: 17px; position: relative; display: grid; place-items: center; overflow: hidden; }
+.product-visual .emoji { font-size: clamp(52px,7vw,85px); filter: drop-shadow(0 12px 9px #0002); transition: transform .25s; }
+.product:hover .emoji { transform: translateY(-5px) scale(1.04); }
+.bg-1 { background: #e6ded0; } .bg-2 { background: #dce8dd; } .bg-3 { background: #e8dfe9; } .bg-4 { background: #e8e6d7; } .bg-5 { background: #dce5eb; } .bg-6 { background: #eee0d5; }
+.tag { position: absolute; top: 12px; left: 12px; background: #fff; color: #344536; border-radius: 6px; padding: 5px 7px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.wish { position: absolute; top: 10px; right: 10px; border: 0; background: #ffffffd9; color: #26392a; border-radius: 50%; width: 34px; height: 34px; font-size: 17px; }
+.product-info { padding: 12px 2px 0; }
+.product-cat { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.product-name { font-size: 14px; font-weight: 700; margin: 5px 0; }
+.rating { font-size: 11px; color: #b27b22; }
+.price-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; }
+.price { font-weight: 800; font-size: 15px; }
+.old-price { color: var(--muted); font-weight: 400; text-decoration: line-through; font-size: 12px; margin-left: 5px; }
+.add { border: 1px solid var(--line); border-radius: 999px; padding: 8px 11px; background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 700; }
+.add:hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.empty { grid-column: 1/-1; padding: 55px 20px; text-align: center; border: 1px dashed var(--line); border-radius: 18px; color: var(--muted); }
+.newsletter { margin-top: 60px; background: var(--soft); border-radius: 22px; padding: 35px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.newsletter h2 { margin: 0 0 7px; letter-spacing: -.04em; } .newsletter p { margin: 0; color: var(--muted); font-size: 13px; }
+.newsletter form { display: flex; gap: 8px; width: min(100%,400px); }
+.newsletter input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 999px; padding: 12px 15px; background: var(--surface); color: var(--ink); }
+footer { border-top: 1px solid var(--line); padding: 25px 28px; color: var(--muted); font-size: 12px; }
+.footer-inner { max-width: 1184px; margin: auto; display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+.overlay { position: fixed; inset: 0; background: #0007; z-index: 5; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.overlay.open { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; z-index: 6; top: 0; right: 0; height: 100dvh; width: min(440px,100%); background: var(--surface); border-left: 1px solid var(--line); padding: 24px; transform: translateX(102%); transition: transform .25s; display: flex; flex-direction: column; }
+.drawer.open { transform: translateX(0); }
+.drawer-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+.drawer-head h2 { margin: 0; }
+.close { border: 1px solid var(--line); border-radius: 50%; width: 36px; height: 36px; color: var(--ink); background: var(--surface); }
+.cart-items { flex: 1; overflow-y: auto; padding: 10px 0; }
+.cart-line { display: grid; grid-template-columns: 62px 1fr auto; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: center; }
+.cart-thumb { width: 62px; height: 62px; display: grid; place-items: center; border-radius: 12px; font-size: 30px; }
+.cart-line strong { font-size: 13px; display: block; }
+.cart-line small { color: var(--muted); }
+.qty { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
+.qty button { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.remove { border: 0; background: transparent; color: var(--muted); font-size: 12px; }
+.cart-bottom { border-top: 1px solid var(--line); padding-top: 18px; }
+.total-row { display: flex; justify-content: space-between; margin: 8px 0; }
+.cart-bottom .primary { width: 100%; margin-top: 12px; padding: 14px; }
+.cart-note { color: var(--muted); font-size: 11px; text-align: center; margin-top: 10px; }
+.toast { position: fixed; z-index: 10; bottom: 22px; left: 50%; transform: translate(-50%,20px); opacity: 0; pointer-events: none; background: var(--ink); color: var(--bg); padding: 12px 18px; border-radius: 999px; font-size: 13px; transition: .2s; box-shadow: 0 6px 25px #0002; }
+.toast.show { opacity: 1; transform: translate(-50%,0); }
+.modal { position: fixed; inset: 0; z-index: 8; display: none; place-items: center; padding: 18px; background: #0008; }
+.modal.open { display: grid; }
+.modal-card { width: min(500px,100%); max-height: 90dvh; overflow-y: auto; background: var(--surface); color: var(--ink); border-radius: 22px; padding: 25px; }
+.modal-card h2 { margin: 0 0 8px; }
+.modal-card p { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.checkout-form { display: grid; gap: 12px; margin-top: 18px; }
+.checkout-form label { font-size: 12px; font-weight: 700; display: grid; gap: 6px; }
+.checkout-form input, .checkout-form textarea, .checkout-form select { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--bg); color: var(--ink); }
+.checkout-form .primary { margin-top: 5px; }
+@media (max-width: 850px) { header { flex-wrap: wrap; gap: 14px; padding: 18px; } .search { order: 3; flex-basis: 100%; } nav, main { padding-left: 18px; padding-right: 18px; } .products { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; } .hero { grid-template-columns: 1fr .7fr; } .hero-art { min-height: 230px; } }
+@media (max-width: 600px) { .topline { font-size: 10px; } .hero { grid-template-columns: 1fr; } .hero-copy { padding: 30px 25px; } .hero-art { min-height: 190px; } .art-orb { width: 145px; font-size: 82px; } .trust-row { grid-template-columns: 1fr; gap: 8px; margin-bottom: 30px; } .trust { padding: 12px; } .section-head { align-items: start; flex-direction: column; } .products { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px 12px; } .newsletter { flex-direction: column; align-items: stretch; padding: 25px; } .newsletter form { width: 100%; } .header-actions { margin-left: auto; } .icon-btn { padding: 9px 11px; } main { padding-top: 18px; } }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="topline">A LITTLE GOOD FOR EVERY DAY · FREE SHIPPING ON ORDERS OVER ₹1,499</div>
+  <header>
+    <div class="logo">northstar<span>®</span></div>
+    <form class="search" id="searchForm"><input id="searchInput" type="search" placeholder="Search everyday essentials…" aria-label="Search products"><button type="submit">Search</button></form>
+    <div class="header-actions"><button class="icon-btn" id="wishlistBtn" aria-label="Show wishlist">♡ <span id="wishCount">0</span></button><button class="icon-btn" id="cartBtn" aria-label="Open cart">Bag <span class="cart-count" id="cartCount">0</span></button></div>
+  </header>
+  <nav id="nav"><button class="active" data-cat="All">All products</button><button data-cat="Home">Home</button><button data-cat="Lifestyle">Lifestyle</button><button data-cat="Accessories">Accessories</button><button data-cat="Wellness">Wellness</button><button data-cat="Stationery">Stationery</button></nav>
+  <main>
+    <section class="hero">
+      <div class="hero-copy"><div class="eyebrow">Thoughtfully picked · Made for real life</div><h1>Small things.<br>Better days.</h1><p>Useful, beautiful everyday goods that bring a little calm to your routine.</p><button class="primary" id="shopNow">Shop the collection ↗</button></div>
+      <div class="hero-art" aria-label="Decorative product illustration"><div class="art-orb">☕</div></div>
+    </section>
+    <section class="trust-row" aria-label="Store benefits"><div class="trust"><span class="trust-icon">📦</span><div><strong>Easy, reliable delivery</strong><small>Tracked orders to your door</small></div></div><div class="trust"><span class="trust-icon">🌿</span><div><strong>Thoughtful essentials</strong><small>Picked for everyday use</small></div></div><div class="trust"><span class="trust-icon">↩️</span><div><strong>Simple returns</strong><small>7-day return window on eligible items</small></div></div></section>
+    <section id="shop">
+      <div class="section-head"><div><h2 id="productHeading">Shop all products</h2><p id="resultCount">A few favourites for your everyday.</p></div><div class="controls"><select id="sortSelect" aria-label="Sort products"><option value="featured">Featured</option><option value="priceAsc">Price: low to high</option><option value="priceDesc">Price: high to low</option><option value="rating">Top rated</option></select></div></div>
+      <div class="chips" id="chips"><button class="chip active" data-cat="All">Everything</button><button class="chip" data-cat="Home">Home</button><button class="chip" data-cat="Lifestyle">Lifestyle</button><button class="chip" data-cat="Accessories">Accessories</button><button class="chip" data-cat="Wellness">Wellness</button><button class="chip" data-cat="Stationery">Stationery</button></div>
+      <div class="products" id="products"></div>
+    </section>
+    <section class="newsletter"><div><h2>A good note in your inbox.</h2><p>New arrivals, useful ideas, and 10% off your first order.</p></div><form id="newsletterForm"><input type="email" required placeholder="Your email address" aria-label="Email address"><button class="primary" type="submit">Sign me up</button></form></section>
+  </main>
+  <footer><div class="footer-inner"><div><strong>northstar®</strong> · Everyday goods, picked with care.</div><div>Contact · Shipping · Returns · Privacy</div><div>© 2026 Northstar Studio</div></div></footer>
+</div>
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="cartDrawer" aria-label="Shopping cart" aria-modal="true" role="dialog"><div class="drawer-head"><h2>Your bag <span id="drawerCount" class="cart-count">0</span></h2><button class="close" id="closeCart" aria-label="Close cart">×</button></div><div class="cart-items" id="cartItems"></div><div class="cart-bottom" id="cartBottom"></div></aside>
+<div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle"><div class="modal-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 id="checkoutTitle">Checkout</h2><button class="close" id="closeCheckout" aria-label="Close checkout">×</button></div><p>This is a demo storefront. No payment will be collected and no order will be sent.</p><form class="checkout-form" id="checkoutForm"><label>Full name<input name="name" required autocomplete="name" placeholder="Your name"></label><label>Email address<input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label><label>Delivery address<textarea name="address" required rows="3" autocomplete="street-address" placeholder="House / street, city, PIN code"></textarea></label><label>Payment method<select name="payment"><option>Cash on delivery (demo)</option><option>UPI (demo only)</option><option>Card (demo only)</option></select></label><div class="total-row"><span>Order total</span><strong id="checkoutTotal">₹0</strong></div><button class="primary" type="submit">Place demo order</button></form></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const productsData = [
+ {id:1,name:'Ribbed Ceramic Mug',cat:'Home',price:449,old:599,rating:4.9,reviews:128,emoji:'☕',bg:1,tag:'Bestseller'},
+ {id:2,name:'Everyday Canvas Tote',cat:'Accessories',price:599,old:749,rating:4.8,reviews:96,emoji:'👜',bg:2,tag:'Popular'},
+ {id:3,name:'Calm Evening Candle',cat:'Wellness',price:699,old:null,rating:4.7,reviews:74,emoji:'🕯️',bg:3,tag:'Made for slow days'},
+ {id:4,name:'Desk Notes Set',cat:'Stationery',price:299,old:349,rating:4.8,reviews:53,emoji:'📒',bg:4,tag:'New'},
+ {id:5,name:'Insulated Travel Bottle',cat:'Lifestyle',price:899,old:1099,rating:4.6,reviews:111,emoji:'🧴',bg:5,tag:'Daily essential'},
+ {id:6,name:'Soft Knit Slippers',cat:'Lifestyle',price:799,old:null,rating:4.7,reviews:67,emoji:'🥿',bg:6,tag:''},
+ {id:7,name:'Mini Planter Set',cat:'Home',price:549,old:649,rating:4.5,reviews:41,emoji:'🪴',bg:2,tag:''},
+ {id:8,name:'Pocket Journal',cat:'Stationery',price:249,old:null,rating:4.9,reviews:89,emoji:'📔',bg:1,tag:'Staff pick'},
+ {id:9,name:'Weekend Crossbody',cat:'Accessories',price:1199,old:1499,rating:4.6,reviews:38,emoji:'🎒',bg:4,tag:''},
+ {id:10,name:'Gentle Care Kit',cat:'Wellness',price:999,old:1199,rating:4.8,reviews:62,emoji:'🧼',bg:3,tag:''},
+ {id:11,name:'Reusable Lunch Box',cat:'Lifestyle',price:649,old:null,rating:4.5,reviews:34,emoji:'🍱',bg:5,tag:''},
+ {id:12,name:'Minimal Table Lamp',cat:'Home',price:1499,old:1799,rating:4.7,reviews:58,emoji:'💡',bg:6,tag:'Limited offer'}
+];
+const money = n => '₹' + n.toLocaleString('en-IN');
+let activeCat = 'All', searchTerm = '', wishlist = new Set(), cart = new Map(), wishlistMode = false;
+const $ = id => document.getElementById(id);
+function showToast(message){ const t=$('toast'); t.textContent=message; t.classList.add('show'); clearTimeout(showToast.timer); showToast.timer=setTimeout(()=>t.classList.remove('show'),2200); }
+function filteredProducts(){ let arr=productsData.filter(p=>(activeCat==='All'||p.cat===activeCat)&&(!wishlistMode||wishlist.has(p.id))&&(p.name+' '+p.cat).toLowerCase().includes(searchTerm.toLowerCase())); const sort=$('sortSelect').value; if(sort==='priceAsc')arr.sort((a,b)=>a.price-b.price); if(sort==='priceDesc')arr.sort((a,b)=>b.price-a.price); if(sort==='rating')arr.sort((a,b)=>b.rating-a.rating); return arr; }
+function renderProducts(){const arr=filteredProducts(); $('productHeading').textContent=wishlistMode?'Your wishlist':activeCat==='All'?'Shop all products':`Shop ${activeCat.toLowerCase()}`; $('resultCount').textContent=`${arr.length} thoughtfully picked ${arr.length===1?'item':'items'} for your everyday.`; $('products').innerHTML=arr.length?arr.map(p=>`<article class="product"><div class="product-visual bg-${p.bg}">${p.tag?`<span class="tag">${p.tag}</span>`:''}<button class="wish" data-wish="${p.id}" aria-label="${wishlist.has(p.id)?'Remove from':'Add to'} wishlist">${wishlist.has(p.id)?'♥':'♡'}</button><span class="emoji">${p.emoji}</span></div><div class="product-info"><div class="product-cat">${p.cat}</div><div class="product-name">${p.name}</div><div class="rating">★ ${p.rating} <span style="color:var(--muted)">(${p.reviews})</span></div><div class="price-row"><div class="price">${money(p.price)}${p.old?`<span class="old-price">${money(p.old)}</span>`:''}</div><button class="add" data-add="${p.id}">+ Add</button></div></div></article>`).join(''):'<div class="empty"><div style="font-size:32px;margin-bottom:10px">⌕</div><strong>No products found</strong><p>Try another search or category.</p><button class="add" id="resetFilters">Clear filters</button></div>'; document.querySelectorAll('[data-cat]').forEach(b=>b.classList.toggle('active',b.dataset.cat===activeCat)); }
+function addToCart(id){cart.set(id,(cart.get(id)||0)+1);updateCart();showToast(`${productsData.find(p=>p.id===id).name} added to your bag`);}
+function updateCart(){const count=[...cart.values()].reduce((a,b)=>a+b,0);$('cartCount').textContent=count;$('drawerCount').textContent=count;$('wishCount').textContent=wishlist.size;const lines=[...cart.entries()];$('cartItems').innerHTML=lines.length?lines.map(([id,qty])=>{const p=productsData.find(x=>x.id===id);return `<div class="cart-line"><div class="cart-thumb bg-${p.bg}">${p.emoji}</div><div><strong>${p.name}</strong><small>${money(p.price)} each</small><div class="qty"><button data-qty="${id}" data-delta="-1" aria-label="Decrease quantity">−</button><span>${qty}</span><button data-qty="${id}" data-delta="1" aria-label="Increase quantity">+</button></div></div><button class="remove" data-remove="${id}">Remove</button></div>`}).join(''):'<div class="empty" style="margin-top:20px"><div style="font-size:35px">🛍️</div><strong>Your bag is taking a break.</strong><p>Add something lovely to get started.</p></div>';const subtotal=lines.reduce((s,[id,q])=>s+productsData.find(p=>p.id===id).price*q,0);const shipping=subtotal===0||subtotal>=1499?0:99;$('cartBottom').innerHTML=lines.length?`<div class="total-row"><span>Subtotal</span><strong>${money(subtotal)}</strong></div><div class="total-row"><span>Shipping</span><strong>${shipping?money(shipping):'FREE'}</strong></div><div class="total-row" style="font-size:18px;margin-top:14px"><span>Total</span><strong>${money(subtotal+shipping)}</strong></div><button class="primary" id="checkoutBtn">Continue to checkout →</button><div class="cart-note">Secure checkout · Demo only, no payment collected</div>`:''; }
+function openCart(){ $('overlay').classList.add('open'); $('cartDrawer').classList.add('open'); }
+function closeCart(){ $('overlay').classList.remove('open'); $('cartDrawer').classList.remove('open'); }
+function setCategory(cat){activeCat=cat;wishlistMode=false;renderProducts();}
+document.addEventListener('click',e=>{const add=e.target.closest('[data-add]');if(add)addToCart(Number(add.dataset.add));const wish=e.target.closest('[data-wish]');if(wish){const id=Number(wish.dataset.wish);wishlist.has(id)?wishlist.delete(id):wishlist.add(id);updateCart();renderProducts();}const qty=e.target.closest('[data-qty]');if(qty){const id=Number(qty.dataset.qty),next=(cart.get(id)||0)+Number(qty.dataset.delta);if(next<=0)cart.delete(id);else cart.set(id,next);updateCart();}const rem=e.target.closest('[data-remove]');if(rem){cart.delete(Number(rem.dataset.remove));updateCart();}const cat=e.target.closest('[data-cat]');if(cat)setCategory(cat.dataset.cat);if(e.target.id==='resetFilters'){activeCat='All';searchTerm='';$('searchInput').value='';renderProducts();}if(e.target.id==='checkoutBtn'){closeCart();$('checkoutTotal').textContent=money([...cart.entries()].reduce((s,[id,q])=>s+productsData.find(p=>p.id===id).price*q,0)+([...cart.values()].reduce((a,b)=>a+b,0)&&[...cart.entries()].reduce((s,[id,q])=>s+productsData.find(p=>p.id===id).price*q,0)<1499?99:0));$('checkoutModal').classList.add('open');}});
+$('searchForm').addEventListener('submit',e=>{e.preventDefault();searchTerm=$('searchInput').value.trim();wishlistMode=false;renderProducts();$('shop').scrollIntoView({behavior:'smooth'});});
+$('searchInput').addEventListener('input',()=>{searchTerm=$('searchInput').value.trim();renderProducts();});
+$('sortSelect').addEventListener('change',renderProducts);
+$('cartBtn').addEventListener('click',openCart);$('closeCart').addEventListener('click',closeCart);$('overlay').addEventListener('click',closeCart);
+$('wishlistBtn').addEventListener('click',()=>{wishlistMode=!wishlistMode;activeCat='All';renderProducts();$('shop').scrollIntoView({behavior:'smooth'});});
+$('shopNow').addEventListener('click',()=>$('shop').scrollIntoView({behavior:'smooth'}));
+$('closeCheckout').addEventListener('click',()=>$('checkoutModal').classList.remove('open'));$('checkoutModal').addEventListener('click',e=>{if(e.target===$('checkoutModal'))$('checkoutModal').classList.remove('open');});
+$('checkoutForm').addEventListener('submit',e=>{e.preventDefault();const name=new FormData(e.target).get('name').trim();cart.clear();updateCart();$('checkoutModal').classList.remove('open');e.target.reset();showToast(`Thanks, ${name.split(' ')[0]}! Demo order placed.`);});
+$('newsletterForm').addEventListener('submit',e=>{e.preventDefault();e.target.reset();showToast('You’re on the list — thanks for signing up!');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCart();$('checkoutModal').classList.remove('open');}});
+renderProducts();updateCart();
+</script>
+</body>
+</html>
